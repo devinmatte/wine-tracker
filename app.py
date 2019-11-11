@@ -2,15 +2,35 @@ import os
 
 from flask import Flask, render_template, request, redirect
 import requests
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
+db = SQLAlchemy(app)
+
+
+class Wines(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    vintage = db.Column(db.Integer)
+    color = db.Column(db.String)
+    country = db.Column(db.String)
+
+    def __init__(self, wine_id, name, vintage, color, country):
+        self.id = wine_id
+        self.name = name
+        self.vintage = vintage
+        self.color = color
+        self.country = country
+
+
+db.create_all()
 
 @app.route('/')
 def home():
-    # TODO: Get Saved Wines
+    wines = Wines.query.all()
 
-    return render_template('index.html')
+    return render_template('index.html', wines=wines)
 
 
 @app.route('/search')
@@ -28,9 +48,10 @@ def search():
     response = requests.get('https://api.globalwinescore.com/globalwinescores/latest/', headers=headers, params=params)
 
     searched_wine = []
+    wines = set(wine.id for wine in Wines.query.all())
+    print(wines)
 
     for wine in response.json()['results']:
-        print(wine)
         searched_wine.append({
             'id': wine['wine_id'],
             'name': wine['wine'],
@@ -39,14 +60,19 @@ def search():
             'country': wine['country']
         })
 
-    print(searched_wine)
-
-    return render_template('search.html', searched_wine=searched_wine)
+    return render_template('search.html', searched_wine=searched_wine, wines=wines)
 
 
 @app.route('/save', methods=['POST'])
 def save():
-    return redirect('/')
+    if request.get_json():
+        data = request.get_json()
+        new_wine = Wines(data[0], data[1], data[2], data[4], data[3])
+        db.session.add(new_wine)
+        db.session.commit()
+        db.session.flush()
+
+    return {'success': True}
 
 
 if __name__ == '__main__':

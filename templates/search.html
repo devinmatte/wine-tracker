@@ -201,7 +201,7 @@
                                                 <td>{{ wine.country }}</td>
                                                 <td>{{ wine.color }}</td>
                                                 <td>
-                                                    <button class="btn btn-primary">
+                                                    <button class="btn btn-primary" {% if wine.id in wines %}disabled{% endif %}>
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                 </td>
