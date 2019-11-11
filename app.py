@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request, redirect
 import requests
 
@@ -22,7 +24,7 @@ def search():
         if request.args.get('search-color'):
             params['color'] = request.args.get('search-color').lower()
 
-    headers = {'Authorization': 'Token 8ba0959720d6a66ac34878b29d9b124f4640b919'}
+    headers = {'Authorization': 'Token ' + os.environ.get('token')}
     response = requests.get('https://api.globalwinescore.com/globalwinescores/latest/', headers=headers, params=params)
 
     searched_wine = []
