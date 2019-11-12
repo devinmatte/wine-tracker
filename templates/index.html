@@ -243,7 +243,7 @@
          aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form action="/notes">
+                <form action="/notes" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modal-{{ wine.id }}Label">Notes for {{ wine.name }}</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -251,25 +251,26 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <input name="wine_id" hidden value="{{ wine.id }}">
                         <div class="form-group">
                             <label for="see">See</label>
-                            <textarea class="form-control" name="see" id="see" rows="3"></textarea>
+                            <textarea class="form-control" name="see" id="see" rows="3">{{ wine.see }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="smell">Smell/Swirl</label>
-                            <textarea class="form-control" name="smell" id="smell" rows="3"></textarea>
+                            <textarea class="form-control" name="smell" id="smell" rows="3">{{ wine.smell }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="sip">Sip</label>
-                            <textarea class="form-control" name="sip" id="sip" rows="3"></textarea>
+                            <textarea class="form-control" name="sip" id="sip" rows="3">{{ wine.sip }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="swallow">Swallow or Spit</label>
-                            <textarea class="form-control" name="swallow" id="swallow" rows="3"></textarea>
+                            <textarea class="form-control" name="swallow" id="swallow" rows="3">{{ wine.swallow }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="savor">Savor</label>
-                            <textarea class="form-control" name="savor" id="savor" rows="3"></textarea>
+                            <textarea class="form-control" name="savor" id="savor" rows="3">{{ wine.savor }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

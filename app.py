@@ -11,10 +11,16 @@ db = SQLAlchemy(app)
 
 class Wines(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False)
     vintage = db.Column(db.Integer)
     color = db.Column(db.String)
     country = db.Column(db.String)
+
+    see = db.Column(db.Text, default="")
+    smell = db.Column(db.Text, default="")
+    sip = db.Column(db.Text, default="")
+    swallow = db.Column(db.Text, default="")
+    savor = db.Column(db.Text, default="")
 
     def __init__(self, wine_id, name, vintage, color, country):
         self.id = wine_id
@@ -22,6 +28,13 @@ class Wines(db.Model):
         self.vintage = vintage
         self.color = color
         self.country = country
+
+    def add_notes(self, see, smell, sip, swallow, savor):
+        self.see = see
+        self.smell = smell
+        self.sip = sip
+        self.swallow = swallow
+        self.savor = savor
 
 
 db.create_all()
@@ -50,7 +63,6 @@ def search():
 
     searched_wine = []
     wines = set(wine.id for wine in Wines.query.all())
-    print(wines)
 
     for wine in response.json()['results']:
         searched_wine.append({
@@ -78,15 +90,23 @@ def save():
 
 @app.route('/notes', methods=['POST'])
 def notes():
-    if request.get_json():
-        # TODO Get form data
-        # TODO Get wine object
-        # TODO Update Wine object with notes
+    if request.form:
+        form_data = request.form
+        wine = Wines.query.filter_by(id=form_data['wine_id']).first()
+
+        wine.add_notes(
+            form_data['see'],
+            form_data['smell'],
+            form_data['sip'],
+            form_data['swallow'],
+            form_data['savor']
+        )
+
         db.session.add(wine)
         db.session.commit()
         db.session.flush()
 
-    return {'success': True}
+    return redirect('/')
 
 
 if __name__ == '__main__':
