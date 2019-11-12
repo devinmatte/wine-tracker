@@ -107,7 +107,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Test User</span>
                             <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                         </a>
                         <!-- Dropdown - User Information -->
@@ -163,6 +163,7 @@
                                             <th>Vintage</th>
                                             <th>Country</th>
                                             <th>Color</th>
+                                            <th>Notes</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -172,6 +173,12 @@
                                                 <td>{{ wine.vintage }}</td>
                                                 <td>{{ wine.country }}</td>
                                                 <td>{{ wine.color }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#modal-{{ wine.id }}">
+                                                        <i class="fa fa-sticky-note"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -229,6 +236,51 @@
         </div>
     </div>
 </div>
+
+{% for wine in wines %}
+    <div class="modal fade" id="modal-{{ wine.id }}" tabindex="-1" role="dialog"
+         aria-labelledby="modal-{{ wine.id }}"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form action="/notes">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-{{ wine.id }}Label">Notes for {{ wine.name }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="see">See</label>
+                            <textarea class="form-control" name="see" id="see" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="smell">Smell/Swirl</label>
+                            <textarea class="form-control" name="smell" id="smell" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="sip">Sip</label>
+                            <textarea class="form-control" name="sip" id="sip" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="swallow">Swallow or Spit</label>
+                            <textarea class="form-control" name="swallow" id="swallow" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="savor">Savor</label>
+                            <textarea class="form-control" name="savor" id="savor" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endfor %}
 
 <!-- Bootstrap core JavaScript-->
 <script src="/static/vendor/jquery/jquery.min.js"></script>

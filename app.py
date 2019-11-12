@@ -26,6 +26,7 @@ class Wines(db.Model):
 
 db.create_all()
 
+
 @app.route('/')
 def home():
     wines = Wines.query.all()
@@ -69,6 +70,19 @@ def save():
         data = request.get_json()
         new_wine = Wines(data[0], data[1], data[2], data[4], data[3])
         db.session.add(new_wine)
+        db.session.commit()
+        db.session.flush()
+
+    return {'success': True}
+
+
+@app.route('/notes', methods=['POST'])
+def notes():
+    if request.get_json():
+        # TODO Get form data
+        # TODO Get wine object
+        # TODO Update Wine object with notes
+        db.session.add(wine)
         db.session.commit()
         db.session.flush()
 
